@@ -11,4 +11,4 @@
 * AES 基础AES加解密算法
 * MD5 基础MD5散列算法 （有误，仅供部分语法细节参考）
 
-详情请参考：[应用密码学](https://holmecat.github.io/tag/xojsxweYA/)
+详情请参考：[应用密码学](https://holmecat.github.io/tag/应用密码学/)
