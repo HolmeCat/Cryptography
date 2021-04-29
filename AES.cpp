@@ -53,7 +53,7 @@ private:
 		{0x9, 0xe, 0xb, 0xd},
 		{0xd, 0x9, 0xe, 0xb},
 		{0xb, 0xd, 0x9, 0xe}};
-	const int Rcon[11] = {1,2,4,8,10,20,40,80,0x1b,36,0x6c};
+	const int Rcon[11] = {1, 2, 4, 8, 10, 20, 40, 80, 0x1b, 36, 0x6c};
 	//辅助函数
 	int getIntFromChar(char c){//把一个字符变成16位的整形
 		int result = (int)c;
@@ -66,12 +66,12 @@ private:
 	int getRight4Bit(int a){ //一个16进制数的右4位
 		return a & 0x0000000f;
 	}
-	int getNumFromSBox(int a,const int s[][16]){ //从s盒里面取数据
+	int getNumFromSBox(int a, const int s[][16]){ //从s盒里面取数据
 		int row = getLeft4Bit(a);
 		int col = getRight4Bit(a);
 		return s[row][col];
 	}
-	int aesMultiple(int a,int le){ //AES乘法,GF(2^8)上乘法
+	int aesMultiple(int a, int le){ //AES乘法,GF(2^8)上乘法
 		int thr = le & 0x8;
 		int sec = le & 0x4;
 		int fir = le & 0x2;
@@ -79,153 +79,153 @@ private:
 		int result = 0;
 		if (thr){ //第四位
 			int b = a;
-			for (int i = 1; i <=3 ; ++i) {
-				b = b<<1;
+			for (int i = 1; i <= 3; ++i) {
+				b = b << 1;
 				if (b >= 256)
 					b = b ^ 0x11b;
 			}
 			b = b % 256;
 			result = result ^ b;
 		}
-		if (sec){
+		if(sec){
 			int b = a;
-			for (int i = 1; i <=2 ; ++i) {
-				b = b<<1;
+			for (int i = 1;i <= 2; ++i) {
+				b = b << 1;
 				if (b >= 256)
 					b = b ^ 0x11b;
 			}
 			b = b % 256;
 			result = result ^ b;
 		}
-		if (fir){
+		if(fir){
 			int b = a << 1;
 			if (b >= 256)
 				b = b ^ 0x11b;
 			b = b % 256;
 			result = result ^ b;
 		}
-		if (fir_mod)
+		if(fir_mod)
 			result = result ^ a;
 		return  result;
 	}
 	//AES
 	void SubBytes(const int s[][16]){ //S盒置换
 		int j;
-		for(j=0;j<16;j++){ //S盒替换
-			rect_m[j/4][j%4] = getNumFromSBox(rect_m[j/4][j%4],s);
+		for(j = 0; j < 16; j++){ //S盒替换
+			rect_m[j / 4][j % 4] = getNumFromSBox(rect_m[j / 4][j % 4], s);
 		}
 		return;
 	}
 	void ShiftRows(){ //行移位
-		int i,j;
+		int i, j;
 		int temp[4];
-		for(i=0;i<4;i++){
-			for(j=0;j<4;j++) //向左，方向为-号，+上4防止负数
-				temp[(j-i+4)%4] = rect_m[i][j];
-			for(j=0;j<4;j++)
+		for(i = 0; i < 4; i++){
+			for(j = 0; j < 4; j++) //向左，方向为-号，+上4防止负数
+				temp[(j - i + 4) % 4] = rect_m[i][j];
+			for(j = 0; j < 4; j++)
 				rect_m[i][j] = temp[j];
 		}
 		return;
 	}
 	void InverseShiftRows(){ //逆向行移位
-		int i,j;
+		int i, j;
 		int temp[4];
-		for(i=0;i<4;i++){
-			for(j=0;j<4;j++) //方向相反，为+号
-				temp[(j+i)%4] = rect_m[i][j];
-			for(j=0;j<4;j++)
+		for(i = 0; i < 4; i++){
+			for(j = 0; j < 4; j++) //方向相反，为+号
+				temp[(j + i) % 4] = rect_m[i][j];
+			for(j = 0; j < 4; j++)
 				rect_m[i][j] = temp[j];
 		}
 		return;
 	}
 	void MixColumns(const int c[][4]){ //列混淆
-		int i,j,k;
+		int i, j, k;
 		//列混淆矩阵乘法
 		int temp[4][4] = {0}; //暂存结果
-		for(i=0;i<4;i++)
-			for(j=0;j<4;j++)
-				for(k=0;k<4;k++){ //此处做GF(2^8)上乘法，列混淆矩阵
-					if(k == 0) temp[i][j] = aesMultiple(rect_m[k][j],c[i][k]);
-					else temp[i][j] ^= aesMultiple(rect_m[k][j],c[i][k]);
+		for(i = 0; i < 4; i++)
+			for(j = 0; j < 4; j++)
+				for(k = 0; k < 4; k++){ //此处做GF(2^8)上乘法，列混淆矩阵
+					if(k == 0) temp[i][j] = aesMultiple(rect_m[k][j], c[i][k]);
+					else temp[i][j] ^= aesMultiple(rect_m[k][j], c[i][k]);
 				}
-		for(i=0;i<4;i++)
-			for(j=0;j<4;j++)
+		for(i = 0; i < 4; i++)
+			for(j = 0; j < 4; j++)
 				rect_m[i][j] = temp[i][j];
 		return;
 	}
 	void AddRoundKey(int k){ //k轮密钥加
-		int i,j;
-		for(i=0;i<4;i++)
-			for(j=0;j<4;j++) //对应位置做异或运算，注意密钥在 k*4 + i的矩阵区
-				rect_m[i][j] ^= rect_key[k*4 + i][j];
+		int i, j;
+		for(i = 0; i < 4; i++)
+			for(j = 0; j < 4; j++) //对应位置做异或运算，注意密钥在 k*4 + i的矩阵区
+				rect_m[i][j] ^= rect_key[k * 4 + i][j];
 		return;
 	}
 public:
-	CAES(string KEY,string IV,int r = 10):round(r){ //构造函数，r是轮数默认10轮，KEY是密钥，IV是CBC工作模式向量
+	CAES(string KEY, string IV = "0123456789ABCDEF", int r = 10):round(r){ //构造函数，r是轮数默认10轮，KEY是密钥，IV是CBC工作模式向量
 		for (int i = 0;i < 16;i++){ //读入string数据
 			key[i] = getIntFromChar(KEY[i]);
 			iv[i] = getIntFromChar(IV[i]);
 		}
 	} 
 	void createKey(){ //生成扩展密钥
-		int n,i,j;
+		int n, i, j;
 		int SubWord[4]; //存储第0列生成时需要的前一列最终数据
 		//第0组密钥就是输入密钥
-		for(i=0;i<16;i++)
-			rect_key[i/4][i%4] = key[i];
+		for(i = 0; i < 16; i++)
+			rect_key[i / 4][i % 4] = key[i];
 		//第i组根据扩展规则特殊处理
-		for(n=1;n<11;n++){ //第1组到第10组生成
+		for(n = 1; n < 11; n++){ //第1组到第10组生成
 			//第0列特殊生成处理
-			for(j=0;j<4;j++) //将前一列即第n-1组第3列（i=3）的4个字节循环左移1个字节
-				SubWord[j] = rect_key[(n-1)*4 + ((j+1)%4)][3];
-			for(j=0;j<4;j++) //并对每个字节进行字节替代变换SubBytes
-				SubWord[j] = getNumFromSBox(SubWord[j],S);
+			for(j = 0; j < 4; j++) //将前一列即第n-1组第3列（i=3）的4个字节循环左移1个字节
+				SubWord[j] = rect_key[(n - 1) * 4 + ((j + 1) % 4)][3];
+			for(j = 0; j < 4; j++) //并对每个字节进行字节替代变换SubBytes
+				SubWord[j] = getNumFromSBox(SubWord[j], S);
 			//将第一行（即第一个字节）与1轮常量rc[n]相异或
 			SubWord[0] ^= Rcon[n];
-			for(j=0;j<4;j++) //再与前一组该列相异或
-				rect_key[n*4 + j][0] = SubWord[j] ^ rect_key[(n-1)*4 + j][0];
-			for(i=1;i<4;i++) //第n组第1列到第3列生成
-				for(j=0;j<4;j++) //第i列第j行异或结果处理
-					rect_key[n*4 + j][i] = rect_key[(n-1)*4 + j][i] ^ rect_key[n*4 + j][i - 1];
+			for(j = 0; j < 4; j++) //再与前一组该列相异或
+				rect_key[n * 4 + j][0] = SubWord[j] ^ rect_key[(n - 1) * 4 + j][0];
+			for(i = 1; i < 4; i++) //第n组第1列到第3列生成
+				for(j = 0; j < 4; j++) //第i列第j行异或结果处理
+					rect_key[n * 4 + j][i] = rect_key[(n - 1) * 4 + j][i] ^ rect_key[n * 4 + j][i - 1];
 			//第n组第i列为第n-1组第i列与第n组第i-1列之异或
 		}
 		return;
 	}
 	void Encryption(){ //AES加密
-		int i,j;
-		for(i=0;i<16;i++) //State矩阵rect_m准备
-			rect_m[i/4][i%4] = m[i];
+		int i, j;
+		for(i = 0; i < 16; i++) //State矩阵rect_m准备
+			rect_m[i / 4][i % 4] = m[i];
 		AddRoundKey(0);
-		for(int i=1;i<=round;i++){ //十轮迭代
+		for(int i = 1; i <= round; i++){ //十轮迭代
 			SubBytes(S); //S盒置换
 			ShiftRows(); //行移位
 			if(i < round) //不是最后一轮的话，列混淆
 				MixColumns(colm);
 			AddRoundKey(i); //i轮密钥加
 		}
-		for(i=0;i<16;i++) //State矩阵rect_m返回
-			m[i] = rect_m[i/4][i%4];
+		for(i = 0; i < 16; i++) //State矩阵rect_m返回
+			m[i] = rect_m[i / 4][i % 4];
 		return;
 	}
 	void Decryption(){ //AES解密
 		int i;
-		for(i=0;i<16;i++) //State矩阵rect_m准备
-			rect_m[i/4][i%4] = m[i];
+		for(i = 0; i < 16; i++) //State矩阵rect_m准备
+			rect_m[i / 4][i % 4] = m[i];
 		AddRoundKey(round);
-		for(int i=round-1;i>=0;i--){ //十轮迭代，这里i是按照加密顺序倒着来的
+		for(int i = round - 1;i >= 0; i--){ //十轮迭代，这里i是按照加密顺序倒着来的
 			InverseShiftRows();//逆向行移位
 			SubBytes(S2);//逆向S盒替换
 			AddRoundKey(i);//i轮密钥加
 			if(i > 0) //不是最后一轮的话，逆向列混淆
 				MixColumns(deColM);//逆向列混淆
 		}
-		for(i=0;i<16;i++) //State矩阵rect_m返回
-			m[i] = rect_m[i/4][i%4];
+		for(i = 0;i < 16; i++) //State矩阵rect_m返回
+			m[i] = rect_m[i / 4][i % 4];
 		return;
 	}
 	void showContext(int mode){ //输出当前内容，0表示int，1表示char
 		int i;
-		for(i=0;i<16;i++){
+		for(i = 0; i < 16; i++){
 			if(mode == 1)
 				cout << (char)m[i] << " ";
 			else if (mode == 0)
@@ -240,50 +240,81 @@ public:
 		}
 		return;
 	}
-	void CBCEncryption(int number,string M[]){ //CBC加密,参数是内容组数，和内容string数组
-		int i,j;
-		for(i = 1;i <= number;i++){
+	void CBCEncryption(int number, string M[]){ //CBC加密,参数是内容组数，和内容string数组
+		int i, j;
+		for(i = 1;i <= number; i++){
 			changeContext(M[i]);
 			if(i == 1){
-				for(j=0;j<16;j++) //异或IV
+				for(j = 0; j < 16; j++) //异或IV
 					m[j] ^= iv[j];
 			}
 			else{
-				for(j=0;j<16;j++) //异或上一轮结果State
-					m[j] ^= rect_m[j/4][j%4];
+				for(j = 0; j < 16; j++) //异或上一轮结果State
+					m[j] ^= rect_m[j / 4][j % 4];
 			}
 			Encryption();
 			showContext(0);
+			showContext(1);
+			cout << endl;
 		}
 		return;
 	}
-	void CBCDecryption(int number,string M[]){ //CBC解密,参数是内容组数，和内容string数组
-		int i,j;
-		for(i = 1;i <= number;i++){
+	void CBCDecryption(int number, string M[]){ //CBC解密,参数是内容组数，和内容string数组
+		int i, j;
+		for(i = 1; i <= number; i++){
 			changeContext(M[i]);
 			//记录下来上一组密文分组的结果
 			int temp[16];
-			for(j=0;j<16;j++)
+			for(j = 0; j < 16; j++)
 				temp[j] = m[j];
 			Decryption();
 			if(i == 1){
-				for(j=0;j<16;j++) //异或IV
+				for(j = 0; j < 16; j++) //异或IV
 					m[j] ^= iv[j];
 			}
 			else{
-				for(j=0;j<16;j++) //异或上一个密文分组
+				for(j = 0; j < 16; j++) //异或上一个密文分组
 					m[j] ^= temp[j];
 			}
 			showContext(0);
+			showContext(1);
+			cout << endl;
 		}
 		return;
 	}
 };
 //以下是CAES类用法实践
-void CBCDemo(){ //CBC模式加解密样例
+void AESDemo(){ //基本AES加解密样例
 	int i;
+	//读入密钥
+	string KEY, M;
+	cout << "输入密钥";
+	cin >> KEY;
+	while (KEY.length() != 16){
+		cout << "密钥的长度应该是16" << endl << "输入密钥";
+		cin >> KEY;
+	}
+	//初始化AES算法API类
+	CAES AES(KEY);
+	AES.createKey();
+	cout << "输入明文";
+	cin >> M;
+	while (M.length() != 16){
+		cout << "明文的长度应该是16" << endl << "输入明文";
+		cin >> M;
+	}
+	AES.changeContext(M);
+	AES.showContext(0); //显示原始数字序列
+	AES.Encryption();
+	AES.showContext(0); //显示加密结果序列
+	AES.Decryption();
+	AES.showContext(0); //显示解密结果序列
+	return;
+}
+void CBCDemo(){ //CBC模式加解密样例
+	int i, k = 3;
 	//读入密钥和IV向量
-	string KEY, IV,M[3];
+	string KEY, IV, M[3];
 	cout << "输入密钥";
 	cin >> KEY;
 	while (KEY.length() != 16){
@@ -297,11 +328,11 @@ void CBCDemo(){ //CBC模式加解密样例
 		cin >> IV;
 	}
 	//初始化AES算法API类
-	CAES AES(KEY,IV,10);
+	CAES AES(KEY, IV);
 	AES.createKey();
-	//输入3组密文
-	for(i=1;i<=3;i++){
-		cout << "输入第"<<i<<"组明文";
+	//输入k组密文
+	for(i = 1; i <= k; i++){
+		cout << "输入第" << i << "组明文";
 		cin >> M[i];
 		while (M[i].length() != 16){
 			cout << "明文的长度应该是16" << endl << "输入明文";
@@ -309,10 +340,11 @@ void CBCDemo(){ //CBC模式加解密样例
 		}
 	}
 	//加密演示
-	AES.CBCEncryption(3,M);
-	//输入3组密文
-	for(i=1;i<=3;i++){
-		cout << "输入第"<<i<<"组密文";
+	cout << "加密演示" << endl;
+	AES.CBCEncryption(k, M);
+	//输入k组密文
+	for(i = 1;i <= k; i++){
+		cout << "输入第" << k << "组密文";
 		cin >> M[i];
 		while (M[i].length() != 16){
 			cout << "密文的长度应该是16" << endl << "输入密文";
@@ -320,9 +352,12 @@ void CBCDemo(){ //CBC模式加解密样例
 		}
 	}
 	//解密演示
-	AES.CBCDecryption(3,M);
+	cout << "解密演示" << endl;
+	AES.CBCDecryption(k, M);
+	return;
 }
 int main(){ //测试主函数
-	CBCDemo();
+	//AESDemo();
+	//CBCDemo();
     return 0;
 }

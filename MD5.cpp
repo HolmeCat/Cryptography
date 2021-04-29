@@ -1,58 +1,58 @@
 #include <iostream>
 #include <string>
 using namespace std;
-class Fill{ //Ìî³ä²Ù×÷¹¤¾ßÀà
+class Fill{ //å¡«å……æ“ä½œå·¥å…·ç±»
 private:
     char L[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 public:
-    int* filling(string input,long length){ //·Ö×éÌî³ä¾ßÌåÊµÏÖ
+    int* filling(string input,long length){ //åˆ†ç»„å¡«å……å…·ä½“å®ç°
         int i,j;
-        int* result = new int[16]; //16×é32Î»
-        for(i=0;i<input.length();i++){ //ÏÈÌîÈëÏûÏ¢ĞÅÏ¢
-            result[i/4] <<= 8; //×óÒÆ³ö8Î»¿Õ¼ä
+        int* result = new int[16]; //16ç»„32ä½
+        for(i=0;i<input.length();i++){ //å…ˆå¡«å…¥æ¶ˆæ¯ä¿¡æ¯
+            result[i/4] <<= 8; //å·¦ç§»å‡º8ä½ç©ºé—´
             result[i/4] += input[i];
         }
-        if(length != -1){ //Èç¹ûÊäÈëµÄlength != -1£¬´ú±í×îºóÒ»×é
-            //´ËÊ±i%4¾ÍÔÚÓ¦¸ÃÌîÈë1ºÍ¶à¸ö0µÄÎ»ÖÃ
-            result[i/4] <<= 8; //×óÒÆ³ö8Î»¿Õ¼ä
-            result[i/4] += 0x80;//ÌîÈë10000000,¼´16½øÖÆµÄ80
-            for(i++;i<56;i++){ //¼ÌĞøÀûÓÃ³¤¶È±ê¼Çi£¬ÄÇÃ´8Î»Ò»´ÎµØÌî³ä,µ½56Í£Ö¹
-                result[i/4] <<= 8; //ÓÒÒÆ³ö8Î»¿Õ¼ä
+        if(length != -1){ //å¦‚æœè¾“å…¥çš„length != -1ï¼Œä»£è¡¨æœ€åä¸€ç»„
+            //æ­¤æ—¶i%4å°±åœ¨åº”è¯¥å¡«å…¥1å’Œå¤šä¸ª0çš„ä½ç½®
+            result[i/4] <<= 8; //å·¦ç§»å‡º8ä½ç©ºé—´
+            result[i/4] += 0x80;//å¡«å…¥10000000,å³16è¿›åˆ¶çš„80
+            for(i++;i<56;i++){ //ç»§ç»­åˆ©ç”¨é•¿åº¦æ ‡è®°iï¼Œé‚£ä¹ˆ8ä½ä¸€æ¬¡åœ°å¡«å……,åˆ°56åœæ­¢
+                result[i/4] <<= 8; //å³ç§»å‡º8ä½ç©ºé—´
                 result[i/4] += 0;
             }
-            //×îºó64Î»·ÅÈëÏûÏ¢³¤¶È
+            //æœ€å64ä½æ”¾å…¥æ¶ˆæ¯é•¿åº¦
             result[14] = result[15] = 0;
-            length *= 8;//´ú±íÓĞÕâÃ´¶àÎ»
-            while((length >> 60)== 0) length <<= 4; //°Ñlength·Ç0¶¥µ½×î¸ßÎ»
-            result[14] = (length >> 32); //¸ß32
-            result[15] = length & 0xFFFF; //µÍ32
+            length *= 8;//ä»£è¡¨æœ‰è¿™ä¹ˆå¤šä½
+            while((length >> 60)== 0) length <<= 4; //æŠŠlengthé0é¡¶åˆ°æœ€é«˜ä½
+            result[14] = (length >> 32); //é«˜32
+            result[15] = length & 0xFFFF; //ä½32
         }
-        return result; //Ìî³äÍê±ÏÖ®ºó·µ»Ø32Î»intÊı×éĞÎ³ÉµÄ·Ö×é
+        return result; //å¡«å……å®Œæ¯•ä¹‹åè¿”å›32ä½intæ•°ç»„å½¢æˆçš„åˆ†ç»„
     }
-    string intToChar(int input){ //32Î»ÕûÊı×ª»¯Îª×Ö·û´®£¬×¢ÒâÊÇ¸ßµÍÎ»µ¹È¡·¨
+    string intToChar(int input){ //32ä½æ•´æ•°è½¬åŒ–ä¸ºå­—ç¬¦ä¸²ï¼Œæ³¨æ„æ˜¯é«˜ä½ä½å€’å–æ³•
         int i;
-        string result = ""; //½á¹û×Ö·û´®
+        string result = ""; //ç»“æœå­—ç¬¦ä¸²
         for(i=0;i<4;i++){
             int temp = (input & 0xF0) >> 4;
-            result += L[temp]; //»ñÈ¡µ½16½øÖÆ×Ö·û
+            result += L[temp]; //è·å–åˆ°16è¿›åˆ¶å­—ç¬¦
             temp = input & 0x0F;
-            result += L[temp]; //»ñÈ¡µ½16½øÖÆ×Ö·û
-            input >>= 8; //ÓÒÒÆËÄÎ»
+            result += L[temp]; //è·å–åˆ°16è¿›åˆ¶å­—ç¬¦
+            input >>= 8; //å³ç§»å››ä½
         }
         return result;
     }
 };
-class CMD5{ //MD5Ëã·¨ÊµÏÖÀà
+class CMD5{ //MD5ç®—æ³•å®ç°ç±»
 private:
-    Fill fill; //Ìî³ä²Ù×÷
-    int A,B,C,D;//Á´½Ó±äÁ¿
-    int* M; //Ìî³äºó½øĞĞ¼ÓÃÜµÄÊı×é
-    int Mi[4][16] = { //4ÂÖÑ­»·Ã¿Ò»ÂÖÓÃµÄ16¸öMi
+    Fill fill; //å¡«å……æ“ä½œ
+    int A,B,C,D;//é“¾æ¥å˜é‡
+    int* M; //å¡«å……åè¿›è¡ŒåŠ å¯†çš„æ•°ç»„
+    int Mi[4][16] = { //4è½®å¾ªç¯æ¯ä¸€è½®ç”¨çš„16ä¸ªMi
         { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15},
         { 1, 6,11, 0, 5,10,15, 4, 9,14, 3, 8,13, 2, 7,12},
         { 5, 8,11,14, 1, 4, 7,10,13, 0, 3, 6, 9,12,15, 2},
         { 0, 7,14, 5,12, 3,10, 1, 8,15, 6,13, 4,11, 2, 9}};
-    int T[64] = { //³£Êı±íTi
+    int T[64] = { //å¸¸æ•°è¡¨Ti
         0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,
         0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,0x6b901122,0xfd987193,0xa679438e,0x49b40821,
         0xf61e2562,0xc040b340,0x265e5a51,0xe9b6c7aa,0xd62f105d,0x02441453,0xd8a1e681,0xe7d3fbc8,
@@ -61,65 +61,65 @@ private:
         0x289b7ec6,0xeaa127fa,0xd4ef3085,0x04881d05,0xd9d4d039,0xe6db99e5,0x1fa27cf8,0xc4ac5665,
         0xf4292244,0x432aff97,0xab9423a7,0xfc93a039,0x655b59c3,0x8f0ccc92,0xffeff47d,0x85845dd1,
         0x6fa87e4f,0xfe2ce6e0,0xa3014314,0x4e0811a1,0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391}; 
-    int Left[4][16] = { //4ÂÖÑ­»·×óÒÆ²½Êı
+    int Left[4][16] = { //4è½®å¾ªç¯å·¦ç§»æ­¥æ•°
         { 7,12,17,22, 7,12,17,22, 7,12,17,22, 7,12,17,22},
         { 5, 9,14,20, 5, 9,14,20, 5, 9,14,20, 5, 9,14,20},
         { 4,11,16,23, 4,11,16,23, 4,11,16,23, 4,11,16,23},
         { 6,10,15,21, 6,10,15,21, 6,10,15,21, 6,10,15,21}};
-    int F(int b,int c,int d) { //Fº¯Êı
+    int F(int b,int c,int d) { //Få‡½æ•°
         return (b & c) | ((~b) & d);
     }
-    int G(int b,int c,int d) { //Gº¯Êı
+    int G(int b,int c,int d) { //Gå‡½æ•°
         return (b & d) | (c & (~d));
     }
-    int H(int b,int c,int d) { //Hº¯Êı
+    int H(int b,int c,int d) { //Hå‡½æ•°
         return b ^ c ^ d;
     }
-    int I(int b,int c,int d) { //Iº¯Êı
+    int I(int b,int c,int d) { //Iå‡½æ•°
         return c ^ (b | (~d));
     }
 public:
-    string Hash(string input){ //MD5É¢ÁĞËã·¨ÊµÏÖ
-        int i,j,k;
-        //³õÊ¼»¯Á´½Ó±äÁ¿
-        A = 0x67452301;B = 0xefcdab89;C = 0x98badcfe;D = 0x10325476;
-        //·Ö×éÉ¢ÁĞÊµÏÖ
-        for(i=0;i<input.length();i+=64){ //Ã¿64¸ö×Ö·û*8=512Î»ÎªÒ»¸ö·Ö×é
-            int a = A,b = B,c = C,d = D;//×¼±¸abcd£¬¼´Ô¤Éè
-            if(i + 63 < input.length())//ÆÕÍ¨·Ö×é
-                M = fill.filling(input.substr(i,i+63),-1);
-            else //×îºóÒ»¸ö
-                M = fill.filling(input.substr(i,input.length()),input.length());
-            //´ËÊ±Éú³ÉÁË±¾´ÎÊ¹ÓÃµÄMÊı×é£¬¿ªÊ¼É¢ÁĞ
-            for(j=0;j<4;j++) //4¸ö»ØºÏµÄÔËËã
-                for(k=0;k<16;k++){ //16´Îµ¥ÔªÔËËã
-                    //·ÇÏßĞÔº¯Êı
-                    if(j==0) a += F(b,c,d);
-                    else if(j==1) a += G(b,c,d);
-                    else if(j==2) a += H(b,c,d);
-                    else if(j==3) a += I(b,c,d);
-                    a += M[Mi[j][k]]; //¼ÓMi
-                    a += T[j * 16 + k]; //¼ÓTi
-                    //aÑ­»·×óÒÆLeftÎ»ÔÙ¼Ób
+    string Hash(string input){ //MD5æ•£åˆ—ç®—æ³•å®ç°
+        int i, j, k;
+        //åˆå§‹åŒ–é“¾æ¥å˜é‡
+        A = 0x67452301; B = 0xefcdab89; C = 0x98badcfe; D = 0x10325476;
+        //åˆ†ç»„æ•£åˆ—å®ç°
+        for(i = 0;i < input.length();i += 64){ //æ¯64ä¸ªå­—ç¬¦*8=512ä½ä¸ºä¸€ä¸ªåˆ†ç»„
+            int a = A, b = B, c = C, d = D;//å‡†å¤‡abcdï¼Œå³é¢„è®¾
+            if(i + 63 < input.length())//æ™®é€šåˆ†ç»„
+                M = fill.filling(input.substr(i, i + 63), -1);
+            else //æœ€åä¸€ä¸ª
+                M = fill.filling(input.substr(i, input.length()), input.length());
+            //æ­¤æ—¶ç”Ÿæˆäº†æœ¬æ¬¡ä½¿ç”¨çš„Mæ•°ç»„ï¼Œå¼€å§‹æ•£åˆ—
+            for(j = 0; j < 4; j++) //4ä¸ªå›åˆçš„è¿ç®—
+                for(k = 0; k < 16; k++){ //16æ¬¡å•å…ƒè¿ç®—
+                    //éçº¿æ€§å‡½æ•°
+                    if(j == 0) a += F(b, c, d);
+                    else if(j == 1) a += G(b, c, d);
+                    else if(j == 2) a += H(b, c, d);
+                    else if(j == 3) a += I(b, c, d);
+                    a += M[Mi[j][k]]; //åŠ Mi
+                    a += T[j * 16 + k]; //åŠ Ti
+                    //aå¾ªç¯å·¦ç§»Leftä½å†åŠ b
                     a = (a >> (32 - Left[j][k]) | a << Left[j][k]) + b;
-                    //ËÄ¸ö»»Î»
-                    int temp = d;b = a;c = b;d = c;a = temp;
+                    //å››ä¸ªæ¢ä½
+                    int temp = d; b = a; c = b; d = c; a = temp;
                 }
-            //×îºó¼Ó·¨
+            //æœ€ååŠ æ³•
             A += a;B += b;C += c;D += d;
-            //É¢ÁĞ½áÊø£¬µÃµ½ÁË±¾´ÎµÄABCD½á¹û£¬Ò²¾ÍÊÇ±¾ÂÖÊä³ö
+            //æ•£åˆ—ç»“æŸï¼Œå¾—åˆ°äº†æœ¬æ¬¡çš„ABCDç»“æœï¼Œä¹Ÿå°±æ˜¯æœ¬è½®è¾“å‡º
         }
         string result = fill.intToChar(A) + fill.intToChar(B) + fill.intToChar(C) + fill.intToChar(D);
         return result;
     }
 };
-int main(){ //²âÊÔÖ÷º¯Êı
+int main(){ //æµ‹è¯•ä¸»å‡½æ•°
     Fill fill;
     cout << fill.intToChar(0x67452301) << endl;
     CMD5 md5;
     string input;
-    cout << "ÊäÈëÉ¢ÁĞ×Ö·û´®£º";
+    cout << "è¾“å…¥æ•£åˆ—å­—ç¬¦ä¸²ï¼š";
     cin >> input;
-    cout << "MD5Âë£º" << md5.Hash(input) << endl;
+    cout << "MD5ç ï¼š" << md5.Hash(input) << endl;
     return 0;
 }

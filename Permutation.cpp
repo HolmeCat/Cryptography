@@ -1,81 +1,81 @@
 #include <iostream>
 using namespace std;
 const int n = 20;
-string text; //ĞèÒª´¦ÀíµÄ¼ÓÃÜ/½âÃÜÎÄ×Ö¶Î
-string result; //´æ´¢¾­¹ıÖÃ»»µÄÎÄ×Ö¶Î
-char Matrix[n][n];//ÖÃ»»¾ØÕó
-int length,height; //ÖÃ»»¾ØÕó´óĞ¡,ÁĞÊıÎªlength£¬ĞĞÊıÎªheight
-int key[n]; //ÖÃ»»ÃÜÔ¿
-int iKey[n]; //ÄæÖÃ»»ÃÜÔ¿
-void InitMatrix(){ //³õÊ¼»¯ÖÃ»»¾ØÕó
+string text; //éœ€è¦å¤„ç†çš„åŠ å¯†/è§£å¯†æ–‡å­—æ®µ
+string result; //å­˜å‚¨ç»è¿‡ç½®æ¢çš„æ–‡å­—æ®µ
+char Matrix[n][n];//ç½®æ¢çŸ©é˜µ
+int length,height; //ç½®æ¢çŸ©é˜µå¤§å°,åˆ—æ•°ä¸ºlengthï¼Œè¡Œæ•°ä¸ºheight
+int key[n]; //ç½®æ¢å¯†é’¥
+int iKey[n]; //é€†ç½®æ¢å¯†é’¥
+void InitMatrix(){ //åˆå§‹åŒ–ç½®æ¢çŸ©é˜µ
     int i,j;
-    for(i=0;i<n;i++)
-        for(j=0;j<n;j++)
+    for(i = 0; i < n; i++)
+        for(j = 0; j < n; j++)
             Matrix[i][j] = ' ';
     return;
 }
-void GetKey(){ //Éú³ÉÖÃ»»
+void GetKey(){ //ç”Ÿæˆç½®æ¢
     int i;
     cin >> length;
-    for(i=0;i<length;i++){
+    for(i = 0; i < length; i++){
         cin >> key[i];
-        key[i]--; //ĞŞÕı
+        key[i]--; //ä¿®æ­£
     }
     return;
 }
-void GetInverseKey(){ //Éú³ÉÄæÖÃ»»
+void GetInverseKey(){ //ç”Ÿæˆé€†ç½®æ¢
     int i;
-    for(i=0;i<length;i++)
+    for(i = 0; i < length; i++)
         iKey[key[i]] = i;
     return;
 }
-int CountHeight(int text,int length){ //¼ÆËãÁĞÊı
-    if(text%length == 0) //ÕıºÃÊÇÒ»¸ö¾ØÕó
-        return text/length;
-    else //·ñÔò°´ÕÕÍù´óÁËËã
-        return text/length + 1;
+int CountHeight(int text, int length){ //è®¡ç®—åˆ—æ•°
+    if(text % length == 0) //æ­£å¥½æ˜¯ä¸€ä¸ªçŸ©é˜µ
+        return text / length;
+    else //å¦åˆ™æŒ‰ç…§å¾€å¤§äº†ç®—
+        return text / length + 1;
 }
-void EPermutation(){ //ÖÃ»»ÃÜÂë¼ÓÃÜ
+void EPermutation(){ //ç½®æ¢å¯†ç åŠ å¯†
     InitMatrix();
-    cout << "Ä£¿é1£ºÖÃ»»¼ÓÃÜ" <<endl;
-    cout << "ÇëÔÚÒ»ĞĞÄÚÊäÈëÖÃ»»ÃÜÔ¿³¤¶È£¨length<=20£©ºÍÄÚÈİ(³¤¶È<=length * 20)£¬ÖĞ¼äÓÃ¿Õ¸ñ¸ô¿ª" << endl;
+    cout << "æ¨¡å—1ï¼šç½®æ¢åŠ å¯†" <<endl;
+    cout << "è¯·åœ¨ä¸€è¡Œå†…è¾“å…¥ç½®æ¢å¯†é’¥é•¿åº¦ï¼ˆlength<=20ï¼‰å’Œå†…å®¹(é•¿åº¦<=length * 20)ï¼Œä¸­é—´ç”¨ç©ºæ ¼éš”å¼€" << endl;
     GetKey();
-    cout << "ÇëÊäÈëÒª¼ÓÃÜµÄÓ¢ÎÄ×ÖÄ¸ÄÚÈİ" << endl;
-    getline(cin,text);//ÕâÒ»ĞĞÓÃÓÚÇå³ıµô»º³åÇø»Ø³µ
-    getline(cin,text);
-    //Êä³öÃÜÎÄ
+    cout << "è¯·è¾“å…¥è¦åŠ å¯†çš„è‹±æ–‡å­—æ¯å†…å®¹" << endl;
+    getline(cin, text);//è¿™ä¸€è¡Œç”¨äºæ¸…é™¤æ‰ç¼“å†²åŒºå›è½¦
+    getline(cin, text);
+    //è¾“å‡ºå¯†æ–‡
     result = "";
-    int i,j,k;
-    height = CountHeight(text.length(),length);
-    for(i=0,k=0;i<n && k<text.length();i++) //°´ĞĞĞ´ÏÂÖÃ»»¾ØÕó
-        for(j=0;j<length && k<text.length();j++)
+    int i, j, k;
+    height = CountHeight(text.length(), length);
+    for(i = 0, k = 0;i < n && k < text.length(); i++) //æŒ‰è¡Œå†™ä¸‹ç½®æ¢çŸ©é˜µ
+        for(j = 0; j < length && k < text.length(); j++)
             Matrix[i][j] = text[k++];
-    for(i=0;i<length;i++) //°´ÁĞÖÃ»»Éú³ÉÃÜÎÄ
-        for(j=0;j<height;j++)
-            result = result + Matrix[j][key[i]]; //ÖÃ»»ÎªÁĞ
-    cout << "ÃÜÎÄ£º" << result << ";"<< endl;
+    for(i = 0; i < length; i++) //æŒ‰åˆ—ç½®æ¢ç”Ÿæˆå¯†æ–‡
+        for(j = 0; j < height; j++)
+            result = result + Matrix[j][key[i]]; //ç½®æ¢ä¸ºåˆ—
+    cout << "å¯†æ–‡ï¼š" << result << ";"<< endl;
     return;
 }
-void DPermutation(){ //ÖÃ»»ÃÜÂë½âÃÜ
+void DPermutation(){ //ç½®æ¢å¯†ç è§£å¯†
     InitMatrix();
-    cout << "Ä£¿é2£ºÖÃ»»½âÃÜ" <<endl;
-    cout << "ÇëÔÚÒ»ĞĞÄÚÊäÈëÖÃ»»ÃÜÔ¿³¤¶È£¨length<=20£©ºÍÄÚÈİ(³¤¶È<=length * 20)£¬ÖĞ¼äÓÃ¿Õ¸ñ¸ô¿ª" << endl;
+    cout << "æ¨¡å—2ï¼šç½®æ¢è§£å¯†" <<endl;
+    cout << "è¯·åœ¨ä¸€è¡Œå†…è¾“å…¥ç½®æ¢å¯†é’¥é•¿åº¦ï¼ˆlength<=20ï¼‰å’Œå†…å®¹(é•¿åº¦<=length * 20)ï¼Œä¸­é—´ç”¨ç©ºæ ¼éš”å¼€" << endl;
     GetKey();
     GetInverseKey();
-    cout << "ÇëÊäÈëÒª½âÃÜµÄÓ¢ÎÄ×ÖÄ¸ÄÚÈİ" << endl;
-    getline(cin,text);//ÕâÒ»ĞĞÓÃÓÚÇå³ıµô»º³åÇø»Ø³µ
-    getline(cin,text);
-    //Êä³öÃ÷ÎÄ
+    cout << "è¯·è¾“å…¥è¦è§£å¯†çš„è‹±æ–‡å­—æ¯å†…å®¹" << endl;
+    getline(cin, text);//è¿™ä¸€è¡Œç”¨äºæ¸…é™¤æ‰ç¼“å†²åŒºå›è½¦
+    getline(cin, text);
+    //è¾“å‡ºæ˜æ–‡
     result = "";
-    int i,j,k;
-    height = CountHeight(text.length(),length);
-    for(i=0,k=0;i<length;i++) //°´ÁĞĞ´ÏÂÖÃ»»¾ØÕó
-        for(j=0;j<height;j++)
+    int i, j, k;
+    height = CountHeight(text.length(), length);
+    for(i = 0, k = 0; i < length; i++) //æŒ‰åˆ—å†™ä¸‹ç½®æ¢çŸ©é˜µ
+        for(j = 0; j < height; j++)
             Matrix[j][i] = text[k++];
-    for(i=0;i<height;i++) //°´ÁĞÄæÖÃ»»Éú³ÉÃ÷ÎÄ
-        for(j=0;j<length;j++)
-            result = result + Matrix[i][iKey[j]]; //ÖÃ»»ÎªĞĞ
-    cout << "Ã÷ÎÄ£º" << result << ";" << endl;
+    for(i = 0; i < height; i++) //æŒ‰åˆ—é€†ç½®æ¢ç”Ÿæˆæ˜æ–‡
+        for(j = 0; j < length; j++)
+            result = result + Matrix[i][iKey[j]]; //ç½®æ¢ä¸ºè¡Œ
+    cout << "æ˜æ–‡ï¼š" << result << ";" << endl;
     return;
 }
 int main(){

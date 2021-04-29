@@ -7,7 +7,7 @@
 * Substitution 替换算法
 * Permutation 置换算法
 * InverseElement 扩展欧几里得除法求逆元
-* DES 基础DES加解密算法 （更新后C++11编译）
+* DES 基础DES加解密算法
 * AES 基础AES加解密算法
 * MD5 基础MD5散列算法 （有误，仅供部分语法细节参考）
 

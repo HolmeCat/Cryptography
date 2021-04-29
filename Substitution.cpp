@@ -3,48 +3,48 @@
 using namespace std;
 
 const int n = 26;
-int key = 0; //ÃÜÔ¿
-string text; //ĞèÒª´¦ÀíµÄ¼ÓÃÜ/½âÃÜÎÄ×Ö¶Î
-int E(int m){ //¼ÓÃÜº¯Êı
+int key = 0; //å¯†é’¥
+string text; //éœ€è¦å¤„ç†çš„åŠ å¯†/è§£å¯†æ–‡å­—æ®µ
+int E(int m){ //åŠ å¯†å‡½æ•°
     return (m + key) % n;
 }
-int D(int L){ //½âÃÜº¯Êı
+int D(int L){ //è§£å¯†å‡½æ•°
     return (L - key + n) % n;
 }
-void ESubstitution(){ //Ìæ»»ÃÜÂë¼ÓÃÜ
+void ESubstitution(){ //æ›¿æ¢å¯†ç åŠ å¯†
     int i;
-    cout << "Ä£¿é1£ºÌæ»»¼ÓÃÜ" <<endl;
-    cout << "ÇëÊäÈë¼ÓÃÜÃÜÔ¿" << endl;
+    cout << "æ¨¡å—1ï¼šæ›¿æ¢åŠ å¯†" <<endl;
+    cout << "è¯·è¾“å…¥åŠ å¯†å¯†é’¥" << endl;
     cin >> key;
-    cout << "ÇëÊäÈëÒª¼ÓÃÜµÄÓ¢ÎÄ×ÖÄ¸ÄÚÈİ" << endl;
-    getline(cin,text);//ÕâÒ»ĞĞÓÃÓÚÇå³ıµô»º³åÇø»Ø³µ
-    getline(cin,text);
-    //Êä³öÃÜÎÄ
-    for(i=0;i<text.length();i++){
-        if(text[i] >='a'&&text[i] <='z')
-            text[i] = E(text[i]-'a'+1)+'a'-1;
-        else if(text[i] >='A'&&text[i] <='Z')
-            text[i] = E(text[i]-'A'+1)+'A'-1;
+    cout << "è¯·è¾“å…¥è¦åŠ å¯†çš„è‹±æ–‡å­—æ¯å†…å®¹" << endl;
+    getline(cin, text);//è¿™ä¸€è¡Œç”¨äºæ¸…é™¤æ‰ç¼“å†²åŒºå›è½¦
+    getline(cin, text);
+    //è¾“å‡ºå¯†æ–‡
+    for(i = 0; i < text.length(); i++){
+        if(text[i] >='a' && text[i] <= 'z')
+            text[i] = E(text[i] - 'a' + 1) + 'a' - 1;
+        else if(text[i] >= 'A' && text[i] <= 'Z')
+            text[i] = E(text[i] - 'A' + 1) + 'A' - 1;
     }
-    cout << "ÃÜÎÄ£º" << text << endl;
+    cout << "å¯†æ–‡ï¼š" << text << endl;
     return;
 }
-void DSubstitution(){ //Ìæ»»ÃÜÂë½âÃÜ
+void DSubstitution(){ //æ›¿æ¢å¯†ç è§£å¯†
     int i;
-    cout << "Ä£¿é2£ºÌæ»»½âÃÜ" <<endl;
-    cout << "ÇëÊäÈë½âÃÜÃÜÔ¿" << endl;
+    cout << "æ¨¡å—2ï¼šæ›¿æ¢è§£å¯†" <<endl;
+    cout << "è¯·è¾“å…¥è§£å¯†å¯†é’¥" << endl;
     cin >> key;
-    cout << "ÇëÊäÈëÒª½âÃÜµÄÓ¢ÎÄ×ÖÄ¸ÄÚÈİ" << endl;
-    getline(cin,text);//ÕâÒ»ĞĞÓÃÓÚÇå³ıµô»º³åÇø»Ø³µ
-    getline(cin,text);
-    //Êä³öÃ÷ÎÄ
-    for(i=0;i<text.length();i++){
-        if(text[i] >='a'&&text[i] <='z')
-            text[i] = D(text[i]-'a'+1)+'a'-1;
-        else if(text[i] >='A'&&text[i] <='Z')
-            text[i] = D(text[i]-'A'+1)+'A'-1;
+    cout << "è¯·è¾“å…¥è¦è§£å¯†çš„è‹±æ–‡å­—æ¯å†…å®¹" << endl;
+    getline(cin, text);//è¿™ä¸€è¡Œç”¨äºæ¸…é™¤æ‰ç¼“å†²åŒºå›è½¦
+    getline(cin, text);
+    //è¾“å‡ºæ˜æ–‡
+    for(i = 0; i < text.length(); i++){
+        if(text[i] >= 'a' && text[i] <= 'z')
+            text[i] = D(text[i] - 'a' + 1) + 'a' - 1;
+        else if(text[i] >= 'A' && text[i] <= 'Z')
+            text[i] = D(text[i] - 'A' + 1) + 'A' - 1;
     }
-    cout << "Ã÷ÎÄ£º" << text << endl;
+    cout << "æ˜æ–‡ï¼š" << text << endl;
     return;
 }
 int main(){
